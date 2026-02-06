@@ -1,17 +1,82 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>Diego English Test Simulator</title>
+
+<style>
+body{font-family:Arial;padding:40px}
+.hidden{display:none}
+button{padding:10px 20px;margin-top:20px}
+textarea{width:100%;height:120px}
+</style>
+</head>
+
 <body>
 
-<h1>My English Test</h1>
+<h1>Diego English Test Simulator</h1>
 
-<button onclick="start()">Start</button>
+<section id="welcome">
+<p>Welcome! Click start.</p>
+<button onclick="start()">Start Test</button>
+</section>
 
-<p id="result"></p>
+<section id="reading" class="hidden">
+<p>Select real English words:</p>
+
+<label><input type="checkbox" value="real"> house</label><br>
+<label><input type="checkbox" value="fake"> blarm</label><br>
+<label><input type="checkbox" value="real"> computer</label><br>
+<label><input type="checkbox" value="fake"> trimp</label><br>
+
+<button onclick="next()">Next</button>
+</section>
+
+<section id="writing" class="hidden">
+<p>Write 50–100 words about your daily routine:</p>
+<textarea id="writing"></textarea><br>
+<button onclick="finish()">Finish Test</button>
+</section>
+
+<section id="result" class="hidden">
+<h2>Your Result</h2>
+<div id="score"></div>
+</section>
 
 <script>
+
+let readingScore=0;
+
 function start(){
- document.getElementById("result").innerHTML="Good job!";
+ show("reading");
 }
+
+function next(){
+ document.querySelectorAll("#reading input").forEach(i=>{
+   if(i.checked && i.value==="real") readingScore+=25;
+ });
+ show("writing");
+}
+
+function finish(){
+ let writing=document.getElementById("writing").value.length;
+ let writingScore=Math.min(writing,100);
+
+ let final=Math.round((readingScore+writingScore)/2);
+
+ document.getElementById("score").innerHTML=
+ "Reading: "+readingScore+
+ "<br>Writing: "+writingScore+
+ "<br><b>Estimated Score: "+final+"</b>";
+
+ show("result");
+}
+
+function show(id){
+ document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+
 </script>
 
 </body>
